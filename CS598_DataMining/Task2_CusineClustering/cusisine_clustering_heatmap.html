@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ForceDirectedGraph</title>
+
+    <script src="https://d3js.org/d3.v6.js"></script>
+
+
+    <script>
+
+    </script>
+
+</head>
+
+<div id="my_dataviz"></div>
+<script>
+
+
+    const COLORL_OVER_SCALES = {
+        '10': {
+            'qual': {
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)',
+                    'rgb(255,127,0)',
+                    'rgb(202,178,214)',
+                    'rgb(106,61,154)']
+            }
+        },
+        '11': {
+            'qual': {
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)',
+                    'rgb(255,127,0)',
+                    'rgb(202,178,214)',
+                    'rgb(106,61,154)',
+                    'rgb(255,255,153)']
+            }
+        },
+        '12': {
+            'qual': {
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)',
+                    'rgb(255,127,0)',
+                    'rgb(202,178,214)',
+                    'rgb(106,61,154)',
+                    'rgb(255,255,153)',
+                    'rgb(177,89,40)']
+            }
+        },
+        '3': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)']
+            }
+        },
+        '4': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)',
+                    'rgb(26, 89, 216)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)']
+            }
+        },
+        '5': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)',
+                    'rgb(26, 89, 216)',
+                    'rgb(240,2,127)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)']
+            }
+        },
+        '6': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)',
+                    'rgb(26, 89, 216)',
+                    'rgb(56,108,176)',
+                    'rgb(240,2,127)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)']
+            }
+        },
+        '7': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)',
+                    'rgb(26, 89, 216)',
+                    'rgb(56,108,176)',
+                    'rgb(240,2,127)',
+                    'rgb(191,91,23)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)']
+            }
+        },
+        '8': {
+            'qual': {
+                'Accent': ['rgb(127,201,127)',
+                    'rgb(190,174,212)',
+                    'rgb(253,192,134)',
+                    'rgb(26, 89, 216)',
+                    'rgb(56,108,176)',
+                    'rgb(240,2,127)',
+                    'rgb(191,91,23)',
+                    'rgb(102,102,102)'],
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)',
+                    'rgb(255,127,0)']
+            }
+        },
+        '9': {
+            'qual': {
+                'Paired': ['rgb(166,206,227)',
+                    'rgb(31,120,180)',
+                    'rgb(178,223,138)',
+                    'rgb(51,160,44)',
+                    'rgb(251,154,153)',
+                    'rgb(227,26,28)',
+                    'rgb(253,191,111)',
+                    'rgb(255,127,0)',
+                    'rgb(202,178,214)']
+            }
+        }
+    }
+
+
+    // set the dimensions and margins of the graph
+    const margin = {top: 50, right: 30, bottom: 30, left: 100}
+    let width = 900 - margin.left - margin.right
+    let height = 700 - margin.top - margin.bottom
+
+    // append the svg object to the body of the page
+    const svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
+
+
+    plot_configurations = {'min_value': 0.8, 'max_value': 0.99}
+
+
+    list_data = [{'x': 'African', 'y': 'Brazilian', 'v': 0.895, 'labels': 2}, {'x': 'African', 'y': 'Burgers', 'v': 0.878, 'labels': 2}, {'x': 'African', 'y': 'Cafes', 'v': 0.91, 'labels': 2}, {'x': 'African', 'y': 'Fast Food', 'v': 0.861, 'labels': 2}, {'x': 'African', 'y': 'Gastropubs', 'v': 0.908, 'labels': 2}, {'x': 'African', 'y': 'Italian', 'v': 0.885, 'labels': 2}, {'x': 'African', 'y': 'Nightlife', 'v': 0.931, 'labels': 2}, {'x': 'African', 'y': 'Pizza', 'v': 0.842, 'labels': 2}, {'x': 'African', 'y': 'Sandwiches', 'v': 0.893, 'labels': 2}, {'x': 'African', 'y': 'Specialty Food', 'v': 0.907, 'labels': 2}, {'x': 'African', 'y': 'Tex-Mex', 'v': 0.902, 'labels': 2}, {'x': 'African', 'y': 'Turkish', 'v': 0.818, 'labels': 2}, {'x': 'Brazilian', 'y': 'African', 'v': 0.895, 'labels': 4}, {'x': 'Brazilian', 'y': 'Burgers', 'v': 0.874, 'labels': 4}, {'x': 'Brazilian', 'y': 'Cafes', 'v': 0.878, 'labels': 4}, {'x': 'Brazilian', 'y': 'Fast Food', 'v': 0.858, 'labels': 4}, {'x': 'Brazilian', 'y': 'Gastropubs', 'v': 0.889, 'labels': 4}, {'x': 'Brazilian', 'y': 'Italian', 'v': 0.893, 'labels': 4}, {'x': 'Brazilian', 'y': 'Nightlife', 'v': 0.906, 'labels': 4}, {'x': 'Brazilian', 'y': 'Pizza', 'v': 0.853, 'labels': 4}, {'x': 'Brazilian', 'y': 'Sandwiches', 'v': 0.894, 'labels': 4}, {'x': 'Brazilian', 'y': 'Specialty Food', 'v': 0.905, 'labels': 4}, {'x': 'Brazilian', 'y': 'Tex-Mex', 'v': 0.892, 'labels': 4}, {'x': 'Brazilian', 'y': 'Turkish', 'v': 0.805, 'labels': 4}, {'x': 'Burgers', 'y': 'African', 'v': 0.878, 'labels': 4}, {'x': 'Burgers', 'y': 'Brazilian', 'v': 0.874, 'labels': 4}, {'x': 'Burgers', 'y': 'Cafes', 'v': 0.915, 'labels': 4}, {'x': 'Burgers', 'y': 'Fast Food', 'v': 0.972, 'labels': 4}, {'x': 'Burgers', 'y': 'Gastropubs', 'v': 0.908, 'labels': 4}, {'x': 'Burgers', 'y': 'Italian', 'v': 0.872, 'labels': 4}, {'x': 'Burgers', 'y': 'Nightlife', 'v': 0.928, 'labels': 4}, {'x': 'Burgers', 'y': 'Pizza', 'v': 0.863, 'labels': 4}, {'x': 'Burgers', 'y': 'Sandwiches', 'v': 0.942, 'labels': 4}, {'x': 'Burgers', 'y': 'Specialty Food', 'v': 0.906, 'labels': 4}, {'x': 'Burgers', 'y': 'Tex-Mex', 'v': 0.914, 'labels': 4}, {'x': 'Burgers', 'y': 'Turkish', 'v': 0.814, 'labels': 4}, {'x': 'Cafes', 'y': 'African', 'v': 0.91, 'labels': 1}, {'x': 'Cafes', 'y': 'Brazilian', 'v': 0.878, 'labels': 1}, {'x': 'Cafes', 'y': 'Burgers', 'v': 0.915, 'labels': 1}, {'x': 'Cafes', 'y': 'Fast Food', 'v': 0.909, 'labels': 1}, {'x': 'Cafes', 'y': 'Gastropubs', 'v': 0.929, 'labels': 1}, {'x': 'Cafes', 'y': 'Italian', 'v': 0.911, 'labels': 1}, {'x': 'Cafes', 'y': 'Nightlife', 'v': 0.944, 'labels': 1}, {'x': 'Cafes', 'y': 'Pizza', 'v': 0.877, 'labels': 1}, {'x': 'Cafes', 'y': 'Sandwiches', 'v': 0.963, 'labels': 1}, {'x': 'Cafes', 'y': 'Specialty Food', 'v': 0.94, 'labels': 1}, {'x': 'Cafes', 'y': 'Tex-Mex', 'v': 0.915, 'labels': 1}, {'x': 'Cafes', 'y': 'Turkish', 'v': 0.87, 'labels': 1}, {'x': 'Fast Food', 'y': 'African', 'v': 0.861, 'labels': 4}, {'x': 'Fast Food', 'y': 'Brazilian', 'v': 0.858, 'labels': 4}, {'x': 'Fast Food', 'y': 'Burgers', 'v': 0.972, 'labels': 4}, {'x': 'Fast Food', 'y': 'Cafes', 'v': 0.909, 'labels': 4}, {'x': 'Fast Food', 'y': 'Gastropubs', 'v': 0.876, 'labels': 4}, {'x': 'Fast Food', 'y': 'Italian', 'v': 0.864, 'labels': 4}, {'x': 'Fast Food', 'y': 'Nightlife', 'v': 0.903, 'labels': 4}, {'x': 'Fast Food', 'y': 'Pizza', 'v': 0.864, 'labels': 4}, {'x': 'Fast Food', 'y': 'Sandwiches', 'v': 0.943, 'labels': 4}, {'x': 'Fast Food', 'y': 'Specialty Food', 'v': 0.914, 'labels': 4}, {'x': 'Fast Food', 'y': 'Tex-Mex', 'v': 0.924, 'labels': 4}, {'x': 'Fast Food', 'y': 'Turkish', 'v': 0.821, 'labels': 4}, {'x': 'Gastropubs', 'y': 'African', 'v': 0.908, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Brazilian', 'v': 0.889, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Burgers', 'v': 0.908, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Cafes', 'v': 0.929, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Fast Food', 'v': 0.876, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Italian', 'v': 0.909, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Nightlife', 'v': 0.982, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Pizza', 'v': 0.861, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Sandwiches', 'v': 0.919, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Specialty Food', 'v': 0.906, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Tex-Mex', 'v': 0.889, 'labels': 1}, {'x': 'Gastropubs', 'y': 'Turkish', 'v': 0.833, 'labels': 1}, {'x': 'Italian', 'y': 'African', 'v': 0.885, 'labels': 4}, {'x': 'Italian', 'y': 'Brazilian', 'v': 0.893, 'labels': 4}, {'x': 'Italian', 'y': 'Burgers', 'v': 0.872, 'labels': 4}, {'x': 'Italian', 'y': 'Cafes', 'v': 0.911, 'labels': 4}, {'x': 'Italian', 'y': 'Fast Food', 'v': 0.864, 'labels': 4}, {'x': 'Italian', 'y': 'Gastropubs', 'v': 0.909, 'labels': 4}, {'x': 'Italian', 'y': 'Nightlife', 'v': 0.927, 'labels': 4}, {'x': 'Italian', 'y': 'Pizza', 'v': 0.975, 'labels': 4}, {'x': 'Italian', 'y': 'Sandwiches', 'v': 0.94, 'labels': 4}, {'x': 'Italian', 'y': 'Specialty Food', 'v': 0.914, 'labels': 4}, {'x': 'Italian', 'y': 'Tex-Mex', 'v': 0.887, 'labels': 4}, {'x': 'Italian', 'y': 'Turkish', 'v': 0.835, 'labels': 4}, {'x': 'Nightlife', 'y': 'African', 'v': 0.931, 'labels': 2}, {'x': 'Nightlife', 'y': 'Brazilian', 'v': 0.906, 'labels': 2}, {'x': 'Nightlife', 'y': 'Burgers', 'v': 0.928, 'labels': 2}, {'x': 'Nightlife', 'y': 'Cafes', 'v': 0.944, 'labels': 2}, {'x': 'Nightlife', 'y': 'Fast Food', 'v': 0.903, 'labels': 2}, {'x': 'Nightlife', 'y': 'Gastropubs', 'v': 0.982, 'labels': 2}, {'x': 'Nightlife', 'y': 'Italian', 'v': 0.927, 'labels': 2}, {'x': 'Nightlife', 'y': 'Pizza', 'v': 0.887, 'labels': 2}, {'x': 'Nightlife', 'y': 'Sandwiches', 'v': 0.937, 'labels': 2}, {'x': 'Nightlife', 'y': 'Specialty Food', 'v': 0.919, 'labels': 2}, {'x': 'Nightlife', 'y': 'Tex-Mex', 'v': 0.918, 'labels': 2}, {'x': 'Nightlife', 'y': 'Turkish', 'v': 0.841, 'labels': 2}, {'x': 'Pizza', 'y': 'African', 'v': 0.842, 'labels': 4}, {'x': 'Pizza', 'y': 'Brazilian', 'v': 0.853, 'labels': 4}, {'x': 'Pizza', 'y': 'Burgers', 'v': 0.863, 'labels': 4}, {'x': 'Pizza', 'y': 'Cafes', 'v': 0.877, 'labels': 4}, {'x': 'Pizza', 'y': 'Fast Food', 'v': 0.864, 'labels': 4}, {'x': 'Pizza', 'y': 'Gastropubs', 'v': 0.861, 'labels': 4}, {'x': 'Pizza', 'y': 'Italian', 'v': 0.975, 'labels': 4}, {'x': 'Pizza', 'y': 'Nightlife', 'v': 0.887, 'labels': 4}, {'x': 'Pizza', 'y': 'Sandwiches', 'v': 0.927, 'labels': 4}, {'x': 'Pizza', 'y': 'Specialty Food', 'v': 0.885, 'labels': 4}, {'x': 'Pizza', 'y': 'Tex-Mex', 'v': 0.869, 'labels': 4}, {'x': 'Pizza', 'y': 'Turkish', 'v': 0.817, 'labels': 4}, {'x': 'Sandwiches', 'y': 'African', 'v': 0.893, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Brazilian', 'v': 0.894, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Burgers', 'v': 0.942, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Cafes', 'v': 0.963, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Fast Food', 'v': 0.943, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Gastropubs', 'v': 0.919, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Italian', 'v': 0.94, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Nightlife', 'v': 0.937, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Pizza', 'v': 0.927, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Specialty Food', 'v': 0.949, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Tex-Mex', 'v': 0.921, 'labels': 4}, {'x': 'Sandwiches', 'y': 'Turkish', 'v': 0.881, 'labels': 4}, {'x': 'Specialty Food', 'y': 'African', 'v': 0.907, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Brazilian', 'v': 0.905, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Burgers', 'v': 0.906, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Cafes', 'v': 0.94, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Fast Food', 'v': 0.914, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Gastropubs', 'v': 0.906, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Italian', 'v': 0.914, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Nightlife', 'v': 0.919, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Pizza', 'v': 0.885, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Sandwiches', 'v': 0.949, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Tex-Mex', 'v': 0.921, 'labels': 0}, {'x': 'Specialty Food', 'y': 'Turkish', 'v': 0.893, 'labels': 0}, {'x': 'Tex-Mex', 'y': 'African', 'v': 0.902, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Brazilian', 'v': 0.892, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Burgers', 'v': 0.914, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Cafes', 'v': 0.915, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Fast Food', 'v': 0.924, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Gastropubs', 'v': 0.889, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Italian', 'v': 0.887, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Nightlife', 'v': 0.918, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Pizza', 'v': 0.869, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Sandwiches', 'v': 0.921, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Specialty Food', 'v': 0.921, 'labels': 1}, {'x': 'Tex-Mex', 'y': 'Turkish', 'v': 0.815, 'labels': 1}, {'x': 'Turkish', 'y': 'African', 'v': 0.818, 'labels': 3}, {'x': 'Turkish', 'y': 'Brazilian', 'v': 0.805, 'labels': 3}, {'x': 'Turkish', 'y': 'Burgers', 'v': 0.814, 'labels': 3}, {'x': 'Turkish', 'y': 'Cafes', 'v': 0.87, 'labels': 3}, {'x': 'Turkish', 'y': 'Fast Food', 'v': 0.821, 'labels': 3}, {'x': 'Turkish', 'y': 'Gastropubs', 'v': 0.833, 'labels': 3}, {'x': 'Turkish', 'y': 'Italian', 'v': 0.835, 'labels': 3}, {'x': 'Turkish', 'y': 'Nightlife', 'v': 0.841, 'labels': 3}, {'x': 'Turkish', 'y': 'Pizza', 'v': 0.817, 'labels': 3}, {'x': 'Turkish', 'y': 'Sandwiches', 'v': 0.881, 'labels': 3}, {'x': 'Turkish', 'y': 'Specialty Food', 'v': 0.893, 'labels': 3}, {'x': 'Turkish', 'y': 'Tex-Mex', 'v': 0.815, 'labels': 3}]
+
+
+
+    let list_x = []
+    let list_y = []
+    list_data.map(data => {
+            if (!(data['x'] in list_x)) {
+                list_x.push(data['x'])
+            }
+            if (!(data['y'] in list_y)) {
+                list_y.push(data['y'])
+            }
+        }
+    )
+
+
+    // Build X scales and axis:
+    const x = d3.scaleBand()
+        .range([0, width])
+        .domain(list_x)
+        .padding(0.01);
+    svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x))
+
+    // Build X scales and axis:
+    const y = d3.scaleBand()
+        .range([height, 0])
+        .domain(list_y)
+        .padding(0.01);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Build color scale
+    const myColor = d3.scaleLinear()
+        .range(["white", "#69b3a2"])
+        .domain([plot_configurations.min_value, plot_configurations.max_value])
+
+    // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/heatmap_data.csv")
+
+    //Read the data
+    svg.selectAll()
+        .data(list_data)
+        .join("rect")
+        .attr("x", function (d) {
+            return x(d.x)
+        })
+        .attr("y", function (d) {
+            return y(d.y)
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", y.bandwidth())
+        .style("fill", function (d) {
+            if (d.v > plot_configurations.max_value) {
+                    return 'white'
+                }
+
+            if (!d.labels) {
+                return myColor(d.v)
+            } else {
+                console.log('d.labels', d.labels)
+                const main_color = COLORL_OVER_SCALES['6']['qual']['Accent'][d.labels]
+                console.log(main_color)
+                return d3.scaleLinear()
+                .range(["white", main_color])
+                .domain([plot_configurations.min_value, plot_configurations.max_value])(d.v)
+            }
+        })
+
+
+</script>
+</html>

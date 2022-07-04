@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ForceDirectedGraph</title>
+
+    <script src="https://d3js.org/d3.v6.js"></script>
+
+
+    <script>
+
+    </script>
+
+</head>
+
+<div id="my_dataviz"></div>
+<script>
+
+    const data =[{'business_id': 'z3yFuLVrmH-3RJruPEMYKw', 'size': 1, 'stars': 4.0, 'votes': 42.0, 'score': 6.78}, {'business_id': 'MPyxaNVuWlAQqJ0iKV5rQw', 'size': 1, 'stars': 4.0, 'votes': 12.0, 'score': 4.73}, {'business_id': 'y8VQQO_WkYNjSLcq6hyjPA', 'size': 1, 'stars': 3.0, 'votes': 11.0, 'score': 4.13}, {'business_id': '3UdZcZn_DGPtjk5GSZtLNg', 'size': 1, 'stars': 5.0, 'votes': 3.0, 'score': 3.13}, {'business_id': '4GQhbPvGU5r23YdVm8EmkQ', 'size': 2, 'stars': 4.0, 'votes': 0.0, 'score': 2.48}, {'business_id': '6qXQQOWdUZiJmWVqkWB-3w', 'size': 1, 'stars': 4.0, 'votes': 2.0, 'score': 2.48}, {'business_id': 'LC7BFWxUM6CxMMKDMkoSYg', 'size': 1, 'stars': 5.0, 'votes': 1.0, 'score': 2.14}, {'business_id': 'wxRUJXCIM19yivp0tWDznA', 'size': 1, 'stars': 5.0, 'votes': 1.0, 'score': 2.14}, {'business_id': 'AX8lx9wHNYT45lyd7pxaYw', 'size': 1, 'stars': 4.0, 'votes': 1.0, 'score': 1.97}, {'business_id': 'G2AqHSVc8t6I21qiHeq7jA', 'size': 1, 'stars': 4.0, 'votes': 1.0, 'score': 1.97}, {'business_id': 'tZCIC-GWGYS7yh3KVbRnlw', 'size': 1, 'stars': 4.0, 'votes': 1.0, 'score': 1.97}, {'business_id': 'Tk2dSL0TwQeI_zNJmb442A', 'size': 1, 'stars': 2.0, 'votes': 1.0, 'score': 1.52}, {'business_id': '8871Si56d_dc0igE3TRpgA', 'size': 1, 'stars': 5.0, 'votes': 0.0, 'score': 1.35}, {'business_id': 'RGDyf8-PyzyS9Lzs9bkvgA', 'size': 1, 'stars': 5.0, 'votes': 0.0, 'score': 1.35}, {'business_id': 'IZv6MPN3mHS_yr7h5GhYEg', 'size': 1, 'stars': 5.0, 'votes': 0.0, 'score': 1.35}, {'business_id': 'mYuHPciSbqi2lxYpbs-LCg', 'size': 1, 'stars': 4.0, 'votes': 0.0, 'score': 1.24}, {'business_id': 'ywwnswdMkIjYj46qLsNG2w', 'size': 1, 'stars': 4.0, 'votes': 0.0, 'score': 1.24}, {'business_id': '-2n-OHbbwIv3SY8RP9bgTQ', 'size': 1, 'stars': 4.0, 'votes': 0.0, 'score': 1.24}, {'business_id': 'CM4LY-sjD0Q9HivGTFHdoA', 'size': 1, 'stars': 4.0, 'votes': 0.0, 'score': 1.24}, {'business_id': '5yMcbS15CfhSvVQWCe79tw', 'size': 1, 'stars': 4.0, 'votes': 0.0, 'score': 1.24}, {'business_id': '1bJjWGYip-V2PGj4VIwbiQ', 'size': 1, 'stars': 3.0, 'votes': 0.0, 'score': 1.12}, {'business_id': 'zwToyWL4dT1clsFPK9wI2w', 'size': 1, 'stars': 3.0, 'votes': 0.0, 'score': 1.12}, {'business_id': 'FwYIyHrdkkB28wbbEDJ9Hg', 'size': 1, 'stars': 2.0, 'votes': 0.0, 'score': 0.96}, {'business_id': '69c7z9ySnlqV87tITDGENA', 'size': 1, 'stars': 2.0, 'votes': 0.0, 'score': 0.96}]
+
+
+    // set the dimensions and margins of the graph
+    var margin = {
+            top: 30, right: 30, bottom: 150, left: 60
+        },
+
+        width = 1460 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+
+    // X axis
+    var x = d3.scaleBand()
+        .range([0, width])
+        .domain(data.map(function (d) {
+            return d.business_id;
+        }))
+        .padding(0.2);
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+        .domain([0, 10])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Bars
+    svg.selectAll("mybar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", function (d) {
+            return x(d.business_id);
+        })
+        .attr("y", function (d) {
+            return y(d.score);
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function (d) {
+            return height - y(d.score);
+        })
+        .attr("fill", "#69b3a2")
+
+
+</script>
+</html>

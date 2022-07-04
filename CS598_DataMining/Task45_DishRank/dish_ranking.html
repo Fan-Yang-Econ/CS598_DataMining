@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ForceDirectedGraph</title>
+
+    <script src="https://d3js.org/d3.v6.js"></script>
+
+
+    <script>
+
+    </script>
+
+</head>
+
+<div id="my_dataviz"></div>
+<script>
+
+    const data = [{'dish_name': 'pizza', 'score': 1246.13}, {'dish_name': 'pasta', 'score': 808.94}, {
+        'dish_name': 'cheese',
+        'score': 692.78
+    }, {'dish_name': 'meat', 'score': 627.74}, {'dish_name': 'oca', 'score': 619.98}, {'dish_name': 'rice', 'score': 601.58}, {
+        'dish_name': 'chicken',
+        'score': 482.69
+    }, {'dish_name': 'toma', 'score': 446.1}, {'dish_name': 'garlic', 'score': 390.83}, {'dish_name': 'asti', 'score': 384.99}, {
+        'dish_name': 'olive',
+        'score': 332.84
+    }, {'dish_name': 'sandwich', 'score': 332.0}, {'dish_name': 'sage', 'score': 310.64}, {
+        'dish_name': 'bra',
+        'score': 255.87
+    }, {'dish_name': 'meatball', 'score': 248.25}, {'dish_name': 'steak', 'score': 209.33}, {
+        'dish_name': 'spaghetti',
+        'score': 208.4
+    }, {'dish_name': 'mushroom', 'score': 199.5}, {'dish_name': 'shrimp', 'score': 196.89}, {
+        'dish_name': 'mozzarella',
+        'score': 184.35
+    }, {'dish_name': 'ravioli', 'score': 174.11}, {'dish_name': 'salt', 'score': 171.3}, {
+        'dish_name': 'basil',
+        'score': 162.21
+    }, {'dish_name': 'lobster', 'score': 150.58}, {'dish_name': 'dal', 'score': 147.13}, {
+        'dish_name': 'pepperoni',
+        'score': 146.94
+    }, {'dish_name': 'onion', 'score': 144.06}, {'dish_name': 'olive oil', 'score': 143.31}, {
+        'dish_name': 'mushrooms',
+        'score': 142.1
+    }, {'dish_name': 'prosciutto', 'score': 138.8}, {'dish_name': 'potatoes', 'score': 136.12}, {
+        'dish_name': 'lemon',
+        'score': 135.47
+    }, {'dish_name': 'parmesan', 'score': 130.19}, {'dish_name': 'calamari', 'score': 129.21}, {
+        'dish_name': 'ricotta',
+        'score': 120.7
+    }, {'dish_name': 'pork', 'score': 114.48}, {'dish_name': 'tuna', 'score': 109.67}, {
+        'dish_name': 'spinach',
+        'score': 108.69
+    }, {'dish_name': 'gnocchi', 'score': 104.67}, {'dish_name': 'veal', 'score': 99.8}, {
+        'dish_name': 'pesto',
+        'score': 97.95
+    }, {'dish_name': 'olives', 'score': 97.84}, {'dish_name': 'bruschetta', 'score': 96.64}, {
+        'dish_name': 'calzone',
+        'score': 96.22
+    }, {'dish_name': 'beef', 'score': 93.06}, {'dish_name': 'lasagna', 'score': 91.4}, {'dish_name': 'cookie', 'score': 89.36}, {
+        'dish_name': 'nuts',
+        'score': 87.85
+    }, {'dish_name': 'olive garden', 'score': 85.53}, {'dish_name': 'tiramisu', 'score': 85.25}, {
+        'dish_name': 'filet',
+        'score': 85.18
+    }, {'dish_name': 'strip mall', 'score': 84.43}, {'dish_name': 'tomato sauce', 'score': 82.62}, {
+        'dish_name': 'menta',
+        'score': 82.49
+    }, {'dish_name': 'arugula', 'score': 81.74}, {'dish_name': 'mussels', 'score': 77.58}, {
+        'dish_name': 'ada',
+        'score': 77.29
+    }, {'dish_name': 'bacon', 'score': 77.12}, {'dish_name': 'riso', 'score': 72.36}, {
+        'dish_name': 'salami',
+        'score': 71.91
+    }, {'dish_name': 'marinara sauce', 'score': 70.62}, {'dish_name': 'marsala', 'score': 64.79}, {
+        'dish_name': 'ice cream',
+        'score': 64.36
+    },
+    ]
+
+
+    // set the dimensions and margins of the graph
+    var margin = {
+        top: 30, right: 30, bottom: 70, left: 60
+        },
+
+    width = 1460 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+
+    // X axis
+    var x = d3.scaleBand()
+        .range([0, width])
+        .domain(data.map(function (d) {
+            return d.dish_name;
+        }))
+        .padding(0.2);
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+        .domain([0, 1500])
+        .range([height, 0]);
+    svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // Bars
+    svg.selectAll("mybar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", function (d) {
+            return x(d.dish_name);
+        })
+        .attr("y", function (d) {
+            return y(d.score);
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function (d) {
+            return height - y(d.score);
+        })
+        .attr("fill", "#69b3a2")
+
+
+</script>
+</html>
