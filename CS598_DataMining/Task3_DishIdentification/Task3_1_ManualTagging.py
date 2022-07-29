@@ -16,7 +16,7 @@ from sklearn.metrics import roc_curve
 
 from CS598_DataMining.NLPUtility.CONFIG import get_or_load_sentence_transformer
 
-HOME_PATH = '/CS598_DataMining/Task3_DishIdentification/'
+HOME_PATH = '/Users/yafa/Dropbox/Library/DeepLearning/CS598_DataMining/CS598_DataMining/Task3_DishIdentification/'
 
 def onehot_encoding(df, category_var):
     list_v = []
@@ -33,6 +33,7 @@ def onehot_encoding(df, category_var):
 
 def load_data():
     list_files = listdir(os.path.join(HOME_PATH, 'manualAnnotationTask'))
+    
     list_df_raw_label = []
     
     for file in list_files:

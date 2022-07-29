@@ -24,6 +24,12 @@ def onehot_encoding(df, category_var, unique_value):
 
 
 def submit(y_test, netid='fanyang3'):
+    """
+    https://www.coursera.org/learn/cs-598-dmc/supplement/zVQXW/task-6-overview
+    :param y_test:
+    :param netid:
+    :return:
+    """
     SUBMISSION_URL = 'http://capstone-leaderboard.centralus.cloudapp.azure.com'
     
     req = {
@@ -85,9 +91,14 @@ review_count_range = df_train['review_count'].min(), df_train['review_count'].ma
 star_range = df_train['avg_star'].min(), df_train['avg_star'].max()
 
 X, set_cuisine = prepare_x(df_=df_train, review_count_range=review_count_range, star_range=star_range)
+
+len(set_cuisine)
+
 X_TEST, set_cuisine_test = prepare_x(df_=df_test, review_count_range=review_count_range, star_range=star_range, set_cuisine=set_cuisine)
 
-clf = RandomForestClassifier(max_depth=5, random_state=0, n_estimators=100)
+print(len(X_TEST[0]))
+
+clf = RandomForestClassifier(max_depth=5, random_state=0, n_estimators=1000)
 clf.fit(X, df_train['label'])
 
 print(metrics.f1_score(df_train['label'], clf.predict(X), pos_label=1))
@@ -102,4 +113,6 @@ y_test.mean()
 
 pd.DataFrame({'y_pred': y_test}).to_csv(os.path.join(HOME_PATH, 'CS598_DataMining/Task6_HealthInspection/y_prediction_test.csv'), index=False)
 
-submit(y_test)
+y_test = pd.read_csv(os.path.join(HOME_PATH, 'CS598_DataMining/Task6_HealthInspection/y_prediction_test.csv'))['y_pred'].tolist()
+
+submit(y_test, netid='fanyang3')

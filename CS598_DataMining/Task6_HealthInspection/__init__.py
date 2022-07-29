@@ -2,11 +2,28 @@
 
 Task 6 Overview
 Overview
-Sometimes we make decisions beyond the rating of a restaurant. For example, if a restaurant has a high rating but it often fails to pass hygiene inspections, then this information can dissuade many people to eat there. Using this hygiene information could lead to a more informative system; however, it is often the case where we don’t have such information for all the restaurants, and we are left to make predictions based on the small sample of data points.
+Sometimes we make decisions beyond the rating of a restaurant.
+For example, if a restaurant has a high rating but it often fails to pass hygiene inspections,
+then this information can dissuade many people to eat there.
+Using this hygiene information could lead to a more informative system;
+however, it is often the case where we don’t have such information for all the restaurants,
+and we are left to make predictions based on the small sample of data points.
 
-In this task, you are going to predict whether a set of restaurants will pass the public health inspection tests given the corresponding Yelp text reviews along with some additional information such as the locations and cuisines offered in these restaurants. Making a prediction about an unobserved attribute using data mining techniques represents a wide range of important applications of data mining. Through working on this task, you will gain direct experience with such an application. Due to the flexibility of using as many indicators for prediction as possible, this would also give you an opportunity to potentially combine many different algorithms you have learned from the courses in the Data Mining Specialization to solve a real world problem and experiment with different methods to understand what’s the most effective way of solving the problem.
+In this task, you are going to predict whether a set of restaurants will pass the public health inspection tests
+given the corresponding Yelp text reviews along
+with some additional information such as the locations and cuisines offered in these restaurants.
 
-About the Dataset
+Making a prediction about an unobserved attribute using data mining techniques
+represents a wide range of important applications of data mining.
+Through working on this task, you will gain direct experience with such an application.
+ 
+ Due to the flexibility of using as many indicators for prediction as possible, t
+ his would also give you an opportunity to
+ potentially combine many different algorithms you have learned from the courses in the Data Mining Specialization
+ to solve a real world problem and experiment with different methods
+ to understand what’s the most effective way of solving the problem.
+
+==== About the Dataset ====
 You should first download the dataset. The dataset is composed of a training subset containing 546 restaurants used for training your classifier, in addition to a testing subset of 12753 restaurants used for evaluating the performance of the classifier. In the training subset, you will be provided with a binary label for each restaurant, which indicates whether the restaurant has passed the latest public health inspection test or not, whereas for the testing subset, you will not have access to any labels. The dataset is spread across three files such that the first 546 lines in each file corresponding to the training subset, and the rest are part of the testing subset. Below is a description of each file:
 
 hygiene.dat: Each line contains the concatenated text reviews of one restaurant.
@@ -33,9 +50,12 @@ NicknameLabel1Label2...Label12573
 
 
 Submission
-Report. We suggest that it be 1-3 pages long. The report will be peer-graded. Your report will need to include the following elements:
+Report. We suggest that it be 1-3 pages long.
+The report will be peer-graded. Your report will need to include the following elements:
 
-A brief description and comparison of all the methods you tried. By "methods" we are referring to the text processing techniques, feature representation and selection, and learning algorithms you experimented with. Try to explain why some methods are performing better than others and include a failure analysis (i.e., looking at particular cases where prediction is incorrect to understand where you might be able to further improve a method).
+A brief description and comparison of all the methods you tried.
+ By "methods" we are referring to the text processing techniques, feature representation and selection, and
+ learning algorithms you experimented with. Try to explain why some methods are performing better than others and include a failure analysis (i.e., looking at particular cases where prediction is incorrect to understand where you might be able to further improve a method).
 
 Details about the method that gave the highest F1 score.
 
