@@ -44,6 +44,13 @@ def get_useful_reviews(df_business, df_reviews, cuisine_name, dish_name):
     if not df_bad_review.empty:
         df_bad_review = df_bad_review.sort_values('votes_useful', ascending=False)
         bad_reviews = df_bad_review['text'].iloc[0]
+
+        bad_reviews_list = splitter.split(bad_reviews)
+
+        for position, x in enumerate(bad_reviews_list):
+            if dish_name.lower() in x.lower():
+                bad_reviews = ' '.join(bad_reviews_list[(position - 1): (position + 2)])
+                break
     else:
         bad_reviews = None
     
@@ -148,6 +155,12 @@ for cuisine_name, df_ in df_dish.groupby('cuisine_name'):
 
 
 df_useful_reviews = pd.DataFrame(list_dish_reviews)
+df_useful_reviews = df_useful_reviews[~df_useful_reviews['bad_reviews'].isna()]
+df_useful_reviews = df_useful_reviews[~df_useful_reviews['good_reviews'].isna()]
+
+df_dish_score = pd.merge(df_dish_score, df_useful_reviews[['dish_name', 'cuisine_name']], on = ['dish_name', 'cuisine_name'])
+
+
 print(json.dumps(df_useful_reviews.to_dict('records')))
 
 with open(os.path.join(HOME_PATH, 'top_reviews.json'), '+w') as f:
